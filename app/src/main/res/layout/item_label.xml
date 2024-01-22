@@ -1,0 +1,26 @@
+<!-- item_label.xml -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/labelNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Label Name"
+        android:textStyle="bold"
+        android:textSize="18sp"/>
+
+
+    <View
+        android:id="@+id/labelContainerView"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@drawable/label_container_background"
+        android:visibility="gone" />
+
+
+
+</LinearLayout>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_addlabel"
+        android:name="com.example.mobil5.ui.addlabel.AddLabelFragment"
+        android:label="Add Label"
+        tools:layout="@layout/fragment_addlabel" >
+        <action
+            android:id="@+id/action_nav_addlabel_to_nav_addphoto"
+            app:destination="@id/nav_addphoto" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.mobil5.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_gallery"
+        android:name="com.example.mobil5.ui.gallery.GalleryFragment"
+        android:label="@string/menu_gallery"
+        tools:layout="@layout/fragment_gallery" />
+
+    <fragment
+        android:id="@+id/nav_addphoto"
+        android:name="com.example.mobil5.ui.addphoto.AddPhotoFragment"
+        android:label="Add Photo"
+        tools:layout="@layout/fragment_addphoto" >
+        <action
+            android:id="@+id/action_nav_addphoto_to_nav_addlabel"
+            app:destination="@id/nav_addlabel" />
+    </fragment>
+</navigation>

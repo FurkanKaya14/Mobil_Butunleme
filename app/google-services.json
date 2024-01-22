@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "658839195691",
+    "firebase_url": "https://mobil5-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "mobil5",
+    "storage_bucket": "mobil5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:658839195691:android:2f80ab7a91f9f7878bda6e",
+        "android_client_info": {
+          "package_name": "com.example.mobil5"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAb_48b4A5UDYaLteyMY2U1FaNp7ISnr2E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
