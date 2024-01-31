@@ -33,8 +33,6 @@ public class AddLabelFragment extends Fragment implements LabelAdapter.OnLabelCl
 
     private FragmentAddlabelBinding binding;
     private AddLabelViewModel addLabelViewModel;
-    private Button addButton;
-    private EditText labelNameEditText;
 
     private RecyclerView labelRecyclerView;
     private LabelAdapter labelAdapter;
@@ -80,11 +78,10 @@ public class AddLabelFragment extends Fragment implements LabelAdapter.OnLabelCl
 
         labelsRef.child(labelId).setValue(label)
                 .addOnSuccessListener(aVoid -> {
-
                     Toast.makeText(requireContext(), "Etiket başarıyla eklendi.", Toast.LENGTH_SHORT).show();
+                    loadLabelsFromFirebase();  // Reload labels after adding a new one
                 })
                 .addOnFailureListener(e -> {
-
                     Toast.makeText(requireContext(), "Etiket eklenirken bir hata oluştu.", Toast.LENGTH_SHORT).show();
                 });
 

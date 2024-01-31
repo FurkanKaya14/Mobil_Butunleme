@@ -1,19 +1,23 @@
 package com.example.mobil5.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Photo {
     private String id;
-    private String labelId;
-    private String labelName;
+    private List<String> labelIds = new ArrayList<>();
+    private List<String> labelNames;
     private String imageUrl;
+    private List<Label> labels;
 
     public Photo() {
-        // Boş yapıcı metot Firebase veri okuma işlemi için gereklidir.
+        // Boş constructor
     }
 
-    public Photo(String id, String labelId, String labelName, String imageUrl) {
+    public Photo(String id, List<String> labelIds, List<String> labelNames, String imageUrl) {
         this.id = id;
-        this.labelId = labelId;
-        this.labelName = labelName;
+        this.labelIds = labelIds;
+        this.labelNames = labelNames;
         this.imageUrl = imageUrl;
     }
 
@@ -21,15 +25,26 @@ public class Photo {
         return id;
     }
 
-    public String getLabelId() {
-        return labelId;
+    public List<String> getLabelIds() {
+        return labelIds;
     }
+    public List<String> getLabelNames() { return labelNames; }
 
-    public String getLabelName() {
-        return labelName;
-    }
-
-    public int getImageUrl() {
+    public String getImageUrl() {
         return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public List<Label> getLabels() {
+        return labels;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
+    public void setLabels(List<Label> labels) {
+        this.labels = labels;
     }
 }

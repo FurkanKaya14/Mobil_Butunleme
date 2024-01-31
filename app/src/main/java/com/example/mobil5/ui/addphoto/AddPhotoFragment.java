@@ -1,6 +1,7 @@
 package com.example.mobil5.ui.addphoto;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -15,8 +16,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.Manifest.*;
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -49,7 +52,7 @@ public class AddPhotoFragment extends Fragment {
     private RecyclerView labelRecyclerView;
     private LabelAdapter labelAdapter;
     private Label selectedLabel;
-
+    private static final int REQUEST_CAMERA_PERMISSION = 2;
     private TextView selectedLabelTextView;
 
 
@@ -75,6 +78,7 @@ public class AddPhotoFragment extends Fragment {
                 selectedLabel = label;
                 updateLabelInfoUI(label);
                 Toast.makeText(requireContext(), "Selected Label: " + label.getName(), Toast.LENGTH_SHORT).show();
+                loadLabelsFromFirebase();
             }
         });
         labelRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -104,12 +108,40 @@ public class AddPhotoFragment extends Fragment {
     }
 
     private void dispatchTakePictureIntent() {
+        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            // İzin yok, kullanıcıdan izin iste
+            ActivityCompat.requestPermissions(requireActivity(),
+                    new String[]{android.Manifest.permission.CAMERA},
+                    REQUEST_CAMERA_PERMISSION);
+        } else {
+            // Kamera izni var, fotoğraf çekme işlemini başlat
+            startCameraIntent();
+        }
+    }
+
+    private void startCameraIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
 
+// ...
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CAMERA_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Kullanıcı izni verdi, fotoğraf çekme işlemini başlat
+                startCameraIntent();
+            } else {
+                // Kullanıcı izni vermedi, bir mesaj gösterilebilir
+                Toast.makeText(requireContext(), "Kamera izni reddedildi.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -123,13 +155,15 @@ public class AddPhotoFragment extends Fragment {
             loadLabelsFromFirebase();
         }
     }
-
     private void uploadImageToFirebase(Label selectedLabel) {
         if (selectedLabel != null) {
+            System.out.println("seçilen etiket: "+selectedLabel);
             if (photoImageView.getDrawable() != null) {
+                System.out.println("seçilen etiket: ife girdi ");
                 Bitmap bitmap = getBitmapFromDrawable(photoImageView.getDrawable());
 
                 uploadImageToFirebase(bitmap, selectedLabel);
+                Toast.makeText(requireContext(), "Fotoğraf Eklendi.", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(requireContext(), "Fotoğraf alınamadı.", Toast.LENGTH_SHORT).show();
             }
@@ -174,7 +208,13 @@ public class AddPhotoFragment extends Fragment {
             imageRef.putBytes(data)
                     .addOnSuccessListener(taskSnapshot -> {
                         imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                            savePhotoInfoToDatabase(uri.toString(), selectedLabel.getId(), selectedLabel.getName());
+                            List<String> labelIds = new ArrayList<>();
+                            List<String> labelNames = new ArrayList<>();
+                            labelIds.add(selectedLabel.getId());
+                            labelNames.add(selectedLabel.getName());
+
+                            savePhotoInfoToDatabase(uri.toString(), labelIds.toString(), labelNames.toString());
+                            Toast.makeText(requireContext(), "Fotoğraf Storage yüklendi", Toast.LENGTH_SHORT).show();
                         });
                     })
                     .addOnFailureListener(e -> {
@@ -212,7 +252,7 @@ public class AddPhotoFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle error
+
             }
         });
     }

@@ -86,14 +86,11 @@ public class SignupActivity extends AppCompatActivity {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
-                                                    // Kullanıcı adı ve soyadı başarıyla kaydedildi
                                                     Toast.makeText(SignupActivity.this, "Kullanıcı adı ve soyadı kaydedildi", Toast.LENGTH_SHORT).show();
 
                                                 } else {
-                                                    // Kullanıcı adı ve soyadı kaydedilemedi
                                                     Toast.makeText(SignupActivity.this, "Kullanıcı adı ve soyadı kaydedilemedi", Toast.LENGTH_SHORT).show();
 
-                                                    // Hata mesajını logcat'e yazdır
                                                     Log.e("FirebaseError", "Kayıt işlemi sırasında hata: " + task.getException());
                                                 }
                                             }

@@ -78,7 +78,21 @@ public class LabelAdapter extends RecyclerView.Adapter<LabelAdapter.LabelViewHol
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION && labelList != null && position < labelList.size()) {
                 Label label = labelList.get(position);
+
+                // Seçilen etiketin durumunu güncelleme
+                label.setSelected(!label.isSelected());
+
+                // Yalnızca bir etiketin seçme
+                for (Label otherLabel : labelList) {
+                    if (!otherLabel.equals(label)) {
+                        otherLabel.setSelected(false);
+                    }
+                }
+
+                // Listener'ı çağırma
                 onLabelClickListener.onLabelClick(label);
+
+                notifyDataSetChanged();
             }
         }
     }
